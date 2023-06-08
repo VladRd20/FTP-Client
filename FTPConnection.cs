@@ -16,6 +16,13 @@ public class FTPConnection
         this.password = password;
     }
 
+    public void Disconnect()
+    {
+        server = null;
+        username = null;
+        password = null;
+    }
+
 
     public void UploadFile(string localFilePath, string remoteFilePath)
     {
@@ -66,7 +73,17 @@ public class FTPConnection
 
     private Uri GetServerUri(string path)
     {
-        return new Uri($"ftp://{server}/{path}");
+        
+        try
+        {
+            return new Uri($"ftp://{server}/{path}");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+            return null;
+        }
+
     }
 
     public string CheckConnectionState()

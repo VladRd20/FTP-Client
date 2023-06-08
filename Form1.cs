@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,6 +26,10 @@ namespace FTP_Client
             IPTextBox.KeyDown += TextBox_KeyDown;
             LoginTextBox.KeyDown += TextBox_KeyDown;
             PasswordTextBox.KeyDown += TextBox_KeyDown;
+            IPTextBox.TextChanged += TextBox_TextChanged;
+            LoginTextBox.TextChanged += TextBox_TextChanged;
+            PasswordTextBox.TextChanged += TextBox_TextChanged;
+            LoginButton.Enabled = false;
         }
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
@@ -39,7 +44,45 @@ namespace FTP_Client
             }
         }
 
+        private void TextBox_TextChanged(object sender, EventArgs e)
+        {
+            //If all of them are filled in, show the login button, else make it unclickable
+            if (IPTextBox.Text != "" && LoginTextBox.Text != "" && PasswordTextBox.Text != "")
+            {
+                LoginButton.Enabled = true;
+            }
+            else
+            {
+                LoginButton.Enabled = false;
+            }
+        }
+
         private Stack<string> directoryStack = new Stack<string>();
+
+
+        private void ConnectionLabelHandler()
+        {
+            try
+            {
+                string ConnState = connection.CheckConnectionState();
+{               if (ConnState.ToString().StartsWith("150"))
+                    {
+                        StatusLabel.Text = "Conectat!";
+                        StatusLabel.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        StatusLabel.Text = "Deconectat!";
+                        StatusLabel.ForeColor = Color.Red;
+                    }       
+                RefreshFileList();
+            }
+            } catch {
+                MessageBox.Show("Conexiunea a esuat!");
+                StatusLabel.Text = "Eroare la conectare!";
+                StatusLabel.ForeColor = Color.Red;
+            }
+        }
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
@@ -49,22 +92,9 @@ namespace FTP_Client
             string Username = LoginTextBox.Text;
             string Password = PasswordTextBox.Text;
             string ServerIP = IPTextBox.Text;
-
+            //Start a thread to connect to the server
             connection = new FTPConnection(ServerIP, Username, Password);
-            string ConnState = connection.CheckConnectionState();
-
-            if (ConnState.ToString().StartsWith("150"))
-            {
-                StatusLabel.Text = "Conectat!";
-                StatusLabel.ForeColor = Color.Green;
-
-                RefreshFileList();
-            }
-            else
-            {
-                StatusLabel.Text = "Eroare la conectare!";
-                StatusLabel.ForeColor = Color.Red;
-            }
+            ConnectionLabelHandler();
 
             directoryStack.Clear(); // Clear the directory stack
             directoryStack.Push(currentDirectory); // Push the initial directory
@@ -76,6 +106,11 @@ namespace FTP_Client
         {
             FileListBox.Items.Clear();
             FileListBox.Items.Add("/Back");
+
+            if (IsConnected() == 0)
+            {
+                return;
+            }
 
             string[] files = connection.GetDirectoryList(currentDirectory);
 
@@ -224,14 +259,22 @@ namespace FTP_Client
             IPTextBox.Text = "demo.wftpserver.com";
         }
 
-        private async void Uploadbutton_Click(object sender, EventArgs e)
+        private int IsConnected()
         {
             // Check if there is an active connection
             if (connection == null)
             {
                 MessageBox.Show("Nu sunteti conectat la nici un server\nConectati-va inainte de a realiza careva operatiuni !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return 0;
             }
+            else return 1;
+        }
+
+        private async void Uploadbutton_Click(object sender, EventArgs e)
+        {
+            
+            if (IsConnected() == 0)
+                return;
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
@@ -261,6 +304,54 @@ namespace FTP_Client
 
                 // Refresh the file list after the upload completes
                 RefreshFileList();
+            }
+        }
+
+        private void Logoutbutton_Click(object sender, EventArgs e)
+        {
+
+            //If there is a connection, close it and reset the UI
+            if (connection != null)
+            {
+                connection.Disconnect();
+                connection = null;
+                StatusLabel.Text = "Ati rupt conexiunea !";
+                StatusLabel.ForeColor = Color.Gold;
+                FileListBox.Items.Clear();
+
+            }   
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            //When clicked, delele the selected file. Ask for confirmation first.
+            if (IsConnected() == 0)
+                return;
+
+            string selectedItem = FileListBox.SelectedItem as string;
+            if (selectedItem != null && !IsDirectory(selectedItem))
+            {
+                string selectedFileName = selectedItem.Remove(selectedItem.LastIndexOf('(') - 1);
+                
+
+                DialogResult result = MessageBox.Show("Sunteti sigur ca doriti sa stergeti file-ul " + selectedFileName + " ?", "Delete File", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        // Delete the file using the FTP connection
+                        connection.DeleteFile(currentDirectory + selectedFileName);
+
+                        // Refresh the file list after the delete completes
+                        RefreshFileList();
+                    }
+                    catch (WebException ex)
+                    {
+                        // Handle the exception and display an error message
+                        MessageBox.Show("A aparut o eroare la stergerea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
     }
