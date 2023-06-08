@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.IPTextBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.LoginTextBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.PasswordTextBox = new Guna.UI2.WinForms.Guna2TextBox();
@@ -208,8 +209,10 @@
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.LoginTextBox);
             this.Controls.Add(this.IPTextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.ShowIcon = false;
+            this.Text = "Client FTP local";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -81,6 +81,8 @@ public class FTPConnection
         }
     }
 
+
+
     public long GetFileSize(string filePath)
     {
         FtpWebRequest request = (FtpWebRequest)WebRequest.Create(GetServerUri(filePath));

@@ -22,7 +22,7 @@ namespace FTP_Client
         public Form1()
         {
             InitializeComponent();
-            StatusLabel.Text = "Not Connected";
+            StatusLabel.Text = "Nici o conexiune !";
             IPTextBox.KeyDown += TextBox_KeyDown;
             LoginTextBox.KeyDown += TextBox_KeyDown;
             PasswordTextBox.KeyDown += TextBox_KeyDown;
@@ -53,7 +53,20 @@ namespace FTP_Client
             string ServerIP = IPTextBox.Text;
 
             connection = new FTPConnection(ServerIP, Username, Password);
-            StatusLabel.Text = connection.CheckConnectionState();
+            string ConnState = connection.CheckConnectionState();
+
+            if (ConnState.ToString().StartsWith("150"))
+            {
+                StatusLabel.Text = "Conectat!";
+                StatusLabel.ForeColor = Color.Green;
+
+                RefreshFileList();
+            }
+            else
+            {
+                StatusLabel.Text = "Eroare la conectare!";
+                StatusLabel.ForeColor = Color.Red;
+            }
 
             directoryStack.Clear(); // Clear the directory stack
             directoryStack.Push(currentDirectory); // Push the initial directory
@@ -166,7 +179,7 @@ namespace FTP_Client
                     string selectedFileName = selectedItem;
 
                     // Prompt the user to download and open the file
-                    DialogResult result = MessageBox.Show("Do you want to download and open the file?", "File Download", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = MessageBox.Show("Vreti sa descarcati file-ul ?", "File Download", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
                     {
@@ -174,27 +187,41 @@ namespace FTP_Client
                         string remoteFilePath = currentDirectory + selectedFileName;
 
                         remoteFilePath = remoteFilePath.Remove(remoteFilePath.LastIndexOf('(') - 1);
-                        string localFilePath = Path.GetTempFileName();
-                        connection.DownloadFile(remoteFilePath, localFilePath);
 
-                        // Open the downloaded file
-                        Process.Start(localFilePath);
+                        // Prompt the user to select a folder to save the file
+                        using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+                        {
+                            DialogResult folderResult = folderBrowserDialog.ShowDialog();
+
+                            if (folderResult == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                            {
+                                string selectedFolderPath = folderBrowserDialog.SelectedPath;
+                                string localFilePath = Path.Combine(selectedFolderPath, selectedFileName);
+                                localFilePath = localFilePath.Remove(localFilePath.LastIndexOf('(') - 1);
+
+                                // Download the file to the selected folder
+                                connection.DownloadFile(remoteFilePath, localFilePath);
+
+
+                            }
+                        }
                     }
+
                 }
                 catch (WebException ex)
                 {
                     // Handle the exception and display an error message
-                    MessageBox.Show("An error occurred while accessing the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Eroare la accesarea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (IOException ex)
                 {
                     // Handle the exception and display an error message
-                    MessageBox.Show("An error occurred while opening the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Eroare la deschiderea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
                     // Handle any other exceptions and display an error message
-                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Eroare: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -202,9 +229,9 @@ namespace FTP_Client
         private void DemoButton_Click(object sender, EventArgs e)
         {
             //Set the text boxes to the demo values
-            LoginTextBox.Text = "admin";
-            PasswordTextBox.Text = "vlad123123";
-            IPTextBox.Text = "127.0.0.1";
+            LoginTextBox.Text = "demo";
+            PasswordTextBox.Text = "demo";
+            IPTextBox.Text = "demo.wftpserver.com";
 
         }
 
@@ -215,7 +242,7 @@ namespace FTP_Client
 
             if (connection == null )
             {
-                MessageBox.Show("No active connection. Please connect first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Nu sunteti conectat la nici un server\nConectati-va inainte de a realiza careva operatiuni !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -241,7 +268,7 @@ namespace FTP_Client
                         catch (WebException ex)
                         {
                             // Handle the exception and display an error message
-                            MessageBox.Show("An error occurred while uploading the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("A aparut o eroare la incarcarea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 });
@@ -251,6 +278,7 @@ namespace FTP_Client
             }
         }
 
+        
 
     }
 }
