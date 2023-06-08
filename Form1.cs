@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
 namespace FTP_Client
 {
     public partial class Form1 : Form
@@ -40,11 +39,10 @@ namespace FTP_Client
             }
         }
 
-
         private Stack<string> directoryStack = new Stack<string>();
+
         private void LoginButton_Click(object sender, EventArgs e)
         {
-
             currentDirectory = "/";
             //This button will take the data from text boxes and send it to the server
             //The server will then check the data and send back a response
@@ -126,12 +124,8 @@ namespace FTP_Client
             return $"{size / (1024 * 1024 * 1024)} GB";
         }
 
-
-
-
         private bool IsDirectory(string item)
         {
-
             if (Path.GetExtension(item) != string.Empty)
             {
                 // The item has a file extension, consider it a file
@@ -140,7 +134,6 @@ namespace FTP_Client
 
             // The item doesn't have a file extension, consider it a directory
             return true;
-
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -199,14 +192,11 @@ namespace FTP_Client
                                 string localFilePath = Path.Combine(selectedFolderPath, selectedFileName);
                                 localFilePath = localFilePath.Remove(localFilePath.LastIndexOf('(') - 1);
 
-                                // Download the file to the selected folder
-                                connection.DownloadFile(remoteFilePath, localFilePath);
-
-
+                                // Download the file to the selected folder asynchronously
+                                Task.Run(() => connection.DownloadFile(remoteFilePath, localFilePath));
                             }
                         }
                     }
-
                 }
                 catch (WebException ex)
                 {
@@ -232,15 +222,12 @@ namespace FTP_Client
             LoginTextBox.Text = "demo";
             PasswordTextBox.Text = "demo";
             IPTextBox.Text = "demo.wftpserver.com";
-
         }
 
         private async void Uploadbutton_Click(object sender, EventArgs e)
         {
-
             // Check if there is an active connection
-
-            if (connection == null )
+            if (connection == null)
             {
                 MessageBox.Show("Nu sunteti conectat la nici un server\nConectati-va inainte de a realiza careva operatiuni !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -251,7 +238,6 @@ namespace FTP_Client
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-
                 // Upload files asynchronously
                 await Task.Run(() =>
                 {
@@ -277,9 +263,5 @@ namespace FTP_Client
                 RefreshFileList();
             }
         }
-
-        
-
     }
 }
-    
