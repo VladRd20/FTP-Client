@@ -65,7 +65,8 @@ namespace FTP_Client
             try
             {
                 string ConnState = connection.CheckConnectionState();
-{               if (ConnState.ToString().StartsWith("150"))
+                {
+                    if (ConnState.ToString().StartsWith("150"))
                     {
                         StatusLabel.Text = "Conectat!";
                         StatusLabel.ForeColor = Color.Green;
@@ -74,10 +75,12 @@ namespace FTP_Client
                     {
                         StatusLabel.Text = "Deconectat!";
                         StatusLabel.ForeColor = Color.Red;
-                    }       
-                RefreshFileList();
+                    }
+                    RefreshFileList();
+                }
             }
-            } catch {
+            catch
+            {
                 MessageBox.Show("Conexiunea a esuat!");
                 StatusLabel.Text = "Eroare la conectare!";
                 StatusLabel.ForeColor = Color.Red;
@@ -272,7 +275,7 @@ namespace FTP_Client
 
         private async void Uploadbutton_Click(object sender, EventArgs e)
         {
-            
+
             if (IsConnected() == 0)
                 return;
 
@@ -319,7 +322,7 @@ namespace FTP_Client
                 StatusLabel.ForeColor = Color.Gold;
                 FileListBox.Items.Clear();
 
-            }   
+            }
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -332,7 +335,7 @@ namespace FTP_Client
             if (selectedItem != null && !IsDirectory(selectedItem))
             {
                 string selectedFileName = selectedItem.Remove(selectedItem.LastIndexOf('(') - 1);
-                
+
 
                 DialogResult result = MessageBox.Show("Sunteti sigur ca doriti sa stergeti file-ul " + selectedFileName + " ?", "Delete File", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -351,6 +354,52 @@ namespace FTP_Client
                         // Handle the exception and display an error message
                         MessageBox.Show("A aparut o eroare la stergerea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+            }
+        }
+
+        private void DownloadAllButton_Click(object sender, EventArgs e)
+        {
+            if (IsConnected() == 0)
+                return;
+
+            // Prompt the user to select a destination folder
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            {
+                DialogResult folderResult = folderBrowserDialog.ShowDialog();
+
+                if (folderResult == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                {
+                    string selectedFolderPath = folderBrowserDialog.SelectedPath;
+
+                    // Download all selected files to the destination folder asynchronously
+                    Task.Run(() =>
+                    {
+                        foreach (string selectedItem in FileListBox.SelectedItems)
+                        {
+                            if (!IsDirectory(selectedItem))
+                            {
+                                string selectedFileName = selectedItem.Remove(selectedItem.LastIndexOf('(') - 1);
+
+                                // Construct the remote file path
+                                string remoteFilePath = currentDirectory + selectedFileName;
+
+                                try
+                                {
+                                    // Construct the local file path
+                                    string localFilePath = Path.Combine(selectedFolderPath, selectedFileName);
+
+                                    // Download the file using the FTP connection
+                                    connection.DownloadFile(remoteFilePath, localFilePath);
+                                }
+                                catch (WebException ex)
+                                {
+                                    // Handle the exception and display an error message
+                                    MessageBox.Show("A aparut o eroare la descarcarea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+                        }
+                    });
                 }
             }
         }

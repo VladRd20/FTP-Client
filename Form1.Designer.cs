@@ -40,6 +40,7 @@
             this.Uploadbutton = new Guna.UI2.WinForms.Guna2Button();
             this.Logoutbutton = new Guna.UI2.WinForms.Guna2Button();
             this.DeleteButton = new Guna.UI2.WinForms.Guna2Button();
+            this.DownloadAllButton = new Guna.UI2.WinForms.Guna2Button();
             this.SuspendLayout();
             // 
             // IPTextBox
@@ -57,7 +58,7 @@
             this.IPTextBox.Location = new System.Drawing.Point(12, 12);
             this.IPTextBox.Name = "IPTextBox";
             this.IPTextBox.PasswordChar = '\0';
-            this.IPTextBox.PlaceholderForeColor = System.Drawing.Color.Gray;
+            this.IPTextBox.PlaceholderForeColor = System.Drawing.Color.DimGray;
             this.IPTextBox.PlaceholderText = "IP/Host";
             this.IPTextBox.SelectedText = "";
             this.IPTextBox.Size = new System.Drawing.Size(411, 26);
@@ -77,7 +78,7 @@
             this.LoginTextBox.Location = new System.Drawing.Point(12, 44);
             this.LoginTextBox.Name = "LoginTextBox";
             this.LoginTextBox.PasswordChar = '\0';
-            this.LoginTextBox.PlaceholderForeColor = System.Drawing.Color.Gray;
+            this.LoginTextBox.PlaceholderForeColor = System.Drawing.Color.DimGray;
             this.LoginTextBox.PlaceholderText = "Login";
             this.LoginTextBox.SelectedText = "";
             this.LoginTextBox.Size = new System.Drawing.Size(188, 26);
@@ -97,7 +98,7 @@
             this.PasswordTextBox.Location = new System.Drawing.Point(235, 44);
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.PasswordChar = '*';
-            this.PasswordTextBox.PlaceholderForeColor = System.Drawing.Color.Gray;
+            this.PasswordTextBox.PlaceholderForeColor = System.Drawing.Color.DimGray;
             this.PasswordTextBox.PlaceholderText = "Password";
             this.PasswordTextBox.SelectedText = "";
             this.PasswordTextBox.Size = new System.Drawing.Size(188, 26);
@@ -116,7 +117,7 @@
             this.LoginButton.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
             this.LoginButton.FillColor = System.Drawing.Color.White;
             this.LoginButton.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.LoginButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.LoginButton.ForeColor = System.Drawing.Color.DimGray;
             this.LoginButton.Location = new System.Drawing.Point(682, 12);
             this.LoginButton.Name = "LoginButton";
             this.LoginButton.Size = new System.Drawing.Size(106, 45);
@@ -139,7 +140,7 @@
             this.ServerPortTextBox.MaxLength = 5;
             this.ServerPortTextBox.Name = "ServerPortTextBox";
             this.ServerPortTextBox.PasswordChar = '\0';
-            this.ServerPortTextBox.PlaceholderForeColor = System.Drawing.Color.Gray;
+            this.ServerPortTextBox.PlaceholderForeColor = System.Drawing.Color.DimGray;
             this.ServerPortTextBox.PlaceholderText = "Port";
             this.ServerPortTextBox.SelectedText = "";
             this.ServerPortTextBox.Size = new System.Drawing.Size(139, 26);
@@ -161,6 +162,7 @@
             this.FileListBox.FormattingEnabled = true;
             this.FileListBox.Location = new System.Drawing.Point(0, 316);
             this.FileListBox.Name = "FileListBox";
+            this.FileListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.FileListBox.Size = new System.Drawing.Size(800, 134);
             this.FileListBox.TabIndex = 8;
             this.FileListBox.DoubleClick += new System.EventHandler(this.FileListBox_DoubleClick);
@@ -179,8 +181,8 @@
             this.DemoButton.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
             this.DemoButton.FillColor = System.Drawing.Color.White;
             this.DemoButton.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.DemoButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
-            this.DemoButton.Location = new System.Drawing.Point(682, 265);
+            this.DemoButton.ForeColor = System.Drawing.Color.DimGray;
+            this.DemoButton.Location = new System.Drawing.Point(570, 265);
             this.DemoButton.Name = "DemoButton";
             this.DemoButton.Size = new System.Drawing.Size(106, 45);
             this.DemoButton.TabIndex = 9;
@@ -200,7 +202,7 @@
             this.Uploadbutton.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
             this.Uploadbutton.FillColor = System.Drawing.Color.White;
             this.Uploadbutton.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Uploadbutton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.Uploadbutton.ForeColor = System.Drawing.Color.DimGray;
             this.Uploadbutton.Location = new System.Drawing.Point(682, 63);
             this.Uploadbutton.Name = "Uploadbutton";
             this.Uploadbutton.Size = new System.Drawing.Size(106, 45);
@@ -221,8 +223,8 @@
             this.Logoutbutton.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
             this.Logoutbutton.FillColor = System.Drawing.Color.White;
             this.Logoutbutton.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Logoutbutton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
-            this.Logoutbutton.Location = new System.Drawing.Point(682, 214);
+            this.Logoutbutton.ForeColor = System.Drawing.Color.DimGray;
+            this.Logoutbutton.Location = new System.Drawing.Point(682, 265);
             this.Logoutbutton.Name = "Logoutbutton";
             this.Logoutbutton.Size = new System.Drawing.Size(106, 45);
             this.Logoutbutton.TabIndex = 11;
@@ -242,7 +244,7 @@
             this.DeleteButton.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
             this.DeleteButton.FillColor = System.Drawing.Color.White;
             this.DeleteButton.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.DeleteButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.DeleteButton.ForeColor = System.Drawing.Color.DimGray;
             this.DeleteButton.Location = new System.Drawing.Point(682, 114);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(106, 45);
@@ -250,12 +252,35 @@
             this.DeleteButton.Text = "Delete";
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
+            // DownloadAllButton
+            // 
+            this.DownloadAllButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.DownloadAllButton.BackColor = System.Drawing.Color.Transparent;
+            this.DownloadAllButton.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(213)))), ((int)(((byte)(218)))), ((int)(((byte)(223)))));
+            this.DownloadAllButton.BorderRadius = 1;
+            this.DownloadAllButton.BorderThickness = 2;
+            this.DownloadAllButton.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.DownloadAllButton.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.DownloadAllButton.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.DownloadAllButton.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.DownloadAllButton.FillColor = System.Drawing.Color.White;
+            this.DownloadAllButton.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.DownloadAllButton.ForeColor = System.Drawing.Color.DimGray;
+            this.DownloadAllButton.Location = new System.Drawing.Point(682, 214);
+            this.DownloadAllButton.Name = "DownloadAllButton";
+            this.DownloadAllButton.Size = new System.Drawing.Size(106, 45);
+            this.DownloadAllButton.TabIndex = 13;
+            this.DownloadAllButton.Text = "Download All Selected";
+            this.DownloadAllButton.Click += new System.EventHandler(this.DownloadAllButton_Click);
+            // 
             // Form1
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DownloadAllButton);
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.Logoutbutton);
             this.Controls.Add(this.Uploadbutton);
@@ -267,6 +292,7 @@
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.LoginTextBox);
             this.Controls.Add(this.IPTextBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.ShowIcon = false;
@@ -289,6 +315,7 @@
         private Guna.UI2.WinForms.Guna2Button Uploadbutton;
         private Guna.UI2.WinForms.Guna2Button Logoutbutton;
         private Guna.UI2.WinForms.Guna2Button DeleteButton;
+        private Guna.UI2.WinForms.Guna2Button DownloadAllButton;
     }
 }
 
