@@ -87,17 +87,16 @@ namespace FTP_Client
             }
         }
 
+
         private void LoginButton_Click(object sender, EventArgs e)
         {
             currentDirectory = "/";
             //This button will take the data from text boxes and send it to the server
             //The server will then check the data and send back a response
-            string Username = LoginTextBox.Text;
-            string Password = PasswordTextBox.Text;
-            string ServerIP = IPTextBox.Text;
-            //Start a thread to connect to the server
-            connection = new FTPConnection(ServerIP, Username, Password);
-            ConnectionLabelHandler();
+            connection = new FTPConnection(IPTextBox.Text, LoginTextBox.Text, PasswordTextBox.Text);
+
+            Thread StatusThread = new Thread(ConnectionLabelHandler);
+            StatusThread.Start();
 
             directoryStack.Clear(); // Clear the directory stack
             directoryStack.Push(currentDirectory); // Push the initial directory
