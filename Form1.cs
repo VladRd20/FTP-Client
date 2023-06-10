@@ -91,11 +91,9 @@ namespace FTP_Client
         {
             currentDirectory = "/";
             //This button will take the data from text boxes and send it to the server
-            //The server will then check the data and send back a response
             string Username = LoginTextBox.Text;
             string Password = PasswordTextBox.Text;
             string ServerIP = IPTextBox.Text;
-            //Start a thread to connect to the server
             connection = new FTPConnection(ServerIP, Username, Password);
             ConnectionLabelHandler();
 
