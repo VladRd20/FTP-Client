@@ -1,6 +1,6 @@
 ﻿namespace FTP_Client
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.IPTextBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.LoginTextBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.PasswordTextBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.LoginButton = new Guna.UI2.WinForms.Guna2Button();
-            this.ServerPortTextBox = new Guna.UI2.WinForms.Guna2TextBox();
             this.StatusLabel = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.FileListBox = new System.Windows.Forms.ListBox();
             this.DemoButton = new Guna.UI2.WinForms.Guna2Button();
@@ -125,31 +124,10 @@
             this.LoginButton.Text = "Login";
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
             // 
-            // ServerPortTextBox
-            // 
-            this.ServerPortTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.ServerPortTextBox.DefaultText = "21";
-            this.ServerPortTextBox.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
-            this.ServerPortTextBox.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
-            this.ServerPortTextBox.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.ServerPortTextBox.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.ServerPortTextBox.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.ServerPortTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.ServerPortTextBox.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.ServerPortTextBox.Location = new System.Drawing.Point(429, 12);
-            this.ServerPortTextBox.MaxLength = 5;
-            this.ServerPortTextBox.Name = "ServerPortTextBox";
-            this.ServerPortTextBox.PasswordChar = '\0';
-            this.ServerPortTextBox.PlaceholderForeColor = System.Drawing.Color.DimGray;
-            this.ServerPortTextBox.PlaceholderText = "Port";
-            this.ServerPortTextBox.SelectedText = "";
-            this.ServerPortTextBox.Size = new System.Drawing.Size(139, 26);
-            this.ServerPortTextBox.TabIndex = 6;
-            // 
             // StatusLabel
             // 
             this.StatusLabel.BackColor = System.Drawing.Color.Transparent;
-            this.StatusLabel.Location = new System.Drawing.Point(429, 44);
+            this.StatusLabel.Location = new System.Drawing.Point(427, 49);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(90, 15);
             this.StatusLabel.TabIndex = 7;
@@ -273,7 +251,7 @@
             this.DownloadAllButton.Text = "Download All Selected";
             this.DownloadAllButton.Click += new System.EventHandler(this.DownloadAllButton_Click);
             // 
-            // Form1
+            // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,16 +265,15 @@
             this.Controls.Add(this.DemoButton);
             this.Controls.Add(this.FileListBox);
             this.Controls.Add(this.StatusLabel);
-            this.Controls.Add(this.ServerPortTextBox);
             this.Controls.Add(this.LoginButton);
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.LoginTextBox);
             this.Controls.Add(this.IPTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.ShowIcon = false;
-            this.Text = "Client FTP local";
+            this.Text = "Client FTP (Local)";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -308,7 +285,6 @@
         private Guna.UI2.WinForms.Guna2TextBox LoginTextBox;
         private Guna.UI2.WinForms.Guna2TextBox PasswordTextBox;
         private Guna.UI2.WinForms.Guna2Button LoginButton;
-        private Guna.UI2.WinForms.Guna2TextBox ServerPortTextBox;
         private Guna.UI2.WinForms.Guna2HtmlLabel StatusLabel;
         private System.Windows.Forms.ListBox FileListBox;
         private Guna.UI2.WinForms.Guna2Button DemoButton;

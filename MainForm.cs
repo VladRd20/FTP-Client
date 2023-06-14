@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FTP_Client
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private FTPConnection connection;
         private string currentDirectory;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             StatusLabel.Text = "Nici o conexiune !";
@@ -66,7 +61,7 @@ namespace FTP_Client
             {
                 string ConnState = connection.CheckConnectionState();
                 {
-                    if (ConnState.ToString().StartsWith("150"))
+                    if (ConnState != null)
                     {
                         StatusLabel.Text = "Conectat!";
                         StatusLabel.ForeColor = Color.Green;
@@ -81,7 +76,6 @@ namespace FTP_Client
             }
             catch
             {
-                MessageBox.Show("Conexiunea a esuat!");
                 StatusLabel.Text = "Eroare la conectare!";
                 StatusLabel.ForeColor = Color.Red;
             }
@@ -90,6 +84,7 @@ namespace FTP_Client
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
+
             currentDirectory = "/";
             //This button will take the data from text boxes and send it to the server
             //The server will then check the data and send back a response
@@ -101,7 +96,20 @@ namespace FTP_Client
             directoryStack.Clear(); // Clear the directory stack
             directoryStack.Push(currentDirectory); // Push the initial directory
 
-            RefreshFileList();
+            //If the connection is successful, show the file list
+            try 
+            {                
+                if (connection.CheckConnectionState().ToString().StartsWith("150"))
+                {
+                    RefreshFileList();
+                }
+            }
+            catch
+            {
+                StatusLabel.Text = "Eroare la conectare!";
+                StatusLabel.ForeColor = Color.Red;
+            }   
+       
         }
 
         private void RefreshFileList()
@@ -209,7 +217,7 @@ namespace FTP_Client
                     string selectedFileName = selectedItem;
 
                     // Prompt the user to download and open the file
-                    DialogResult result = MessageBox.Show("Vreti sa descarcati file-ul ?", "File Download", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = MessageBox.Show("Doriti sa descarcati file-ul ?", "File Download", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
                     {
@@ -231,6 +239,9 @@ namespace FTP_Client
 
                                 // Download the file to the selected folder asynchronously
                                 Task.Run(() => connection.DownloadFile(remoteFilePath, localFilePath));
+
+                                StatusLabel.Text = "File descarcat!";
+                                StatusLabel.ForeColor = Color.Green;
                             }
                         }
                     }
@@ -239,16 +250,22 @@ namespace FTP_Client
                 {
                     // Handle the exception and display an error message
                     MessageBox.Show("Eroare la accesarea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    StatusLabel.Text = "Eroare la accesarea file-ului!";
+                    StatusLabel.ForeColor = Color.Red;
                 }
                 catch (IOException ex)
                 {
                     // Handle the exception and display an error message
                     MessageBox.Show("Eroare la deschiderea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    StatusLabel.Text = "Eroare la deschiderea file-ului!";
+                    StatusLabel.ForeColor = Color.Red;
                 }
                 catch (Exception ex)
                 {
                     // Handle any other exceptions and display an error message
                     MessageBox.Show("Eroare: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    StatusLabel.Text = "Eroare!";
+                    StatusLabel.ForeColor = Color.Red;
                 }
             }
         }
@@ -295,15 +312,17 @@ namespace FTP_Client
                         {
                             // Upload the file using the FTP connection
                             connection.UploadFile(filePath, currentDirectory + fileName);
+                            
+                            StatusLabel.Text = "File-ul a fost incarcat cu succes !";
                         }
                         catch (WebException ex)
                         {
                             // Handle the exception and display an error message
-                            MessageBox.Show("A aparut o eroare la incarcarea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            StatusLabel.Text = "Eroare la incarcarea file-ului";
+                            StatusLabel.ForeColor = Color.Red;
                         }
                     }
                 });
-
                 // Refresh the file list after the upload completes
                 RefreshFileList();
             }
@@ -390,11 +409,16 @@ namespace FTP_Client
 
                                     // Download the file using the FTP connection
                                     connection.DownloadFile(remoteFilePath, localFilePath);
+
+                                    StatusLabel.Text = "File-ul a fost descarcat cu succes !";
+                                    StatusLabel.ForeColor = Color.Green;
                                 }
                                 catch (WebException ex)
                                 {
                                     // Handle the exception and display an error message
                                     MessageBox.Show("A aparut o eroare la descarcarea file-ului: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    StatusLabel.Text = "Eroare la descarcarea file-ului !";
+                                    StatusLabel.ForeColor = Color.Red;
                                 }
                             }
                         }
